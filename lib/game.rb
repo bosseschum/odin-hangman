@@ -35,7 +35,8 @@ class Game
       @board[i] = char if @guessed.include?(char)
     end
 
-    puts (@guessed - @solution.split('')).join('').colorize(:red)
+    wrong_letters = (@guessed - @solution.split('')).join(' ')
+    puts "Wrong guesses: #{wrong_letters}".colorize(:red) unless wrong_letters.empty?
     puts ''
     puts @board.join(' ')
     puts ''
