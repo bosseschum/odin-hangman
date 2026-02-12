@@ -1,6 +1,7 @@
 class Player
-  def initialize(name)
-    @name = name
+  attr_accessor :score
+
+  def initialize
     @score = 0
   end
 end
