@@ -69,16 +69,43 @@ class Game
     end
   end
 
+  def load_game
+    data = YAML.load_file('hangman_save.yaml')
+    @guessed = data[:guessed]
+    @wrong = data[:wrong]
+    @solution = data[:solution]
+  end
+
   def play
+    if File.exist?('hangman_save.yaml')
+      puts 'Found a saved game! Load it? (y/n)'
+      if gets.chomp.downcase == 'y'
+        load_game
+        puts "Continuing game... #{@guessed.length} guesses made so far."
+      end
+    end
+
     puts '===== WELCOME TO HANGMAN ====='
     puts "Your word has #{@solution.length} letters. Get ready to guess!"
 
     until winner? || game_over?
       display_board
       puts '=============================='
+      puts 'Do you want to save your game? (y/n/q for save & quit)'
+      choice = gets.chomp.downcase
+      if choice == 'y'
+        save_game
+        puts 'Game saved!'
+      elsif choice == 'q'
+        save_game
+        puts 'Game saved! Goodbye!'
+        return
+      end
       user_guess
       turns_left
     end
+
+    File.delete('hangman_save.yaml') if File.exist?('hangman_save.yaml')
 
     if winner?
       puts 'Congratulations! YOU WIN!'
