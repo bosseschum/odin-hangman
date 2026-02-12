@@ -1,3 +1,5 @@
+require 'yaml'
+
 class Game
   ALPHABET = 26
 
@@ -11,7 +13,7 @@ class Game
 
   def user_guess
     guess = ''
-    until guess.length == 1
+    until guess.length == 1 && guess.match?(/[a-z]/)
       puts 'Your next guess: '
       guess = gets.chomp.downcase
       puts 'Please guess only one character at a time.' if guess.length > 1
@@ -53,6 +55,18 @@ class Game
 
   def game_over?
     @wrong == 10
+  end
+
+  def save_game
+    save = {
+      guessed: @guessed,
+      wrong: @wrong,
+      solution: @solution
+    }
+
+    File.open('hangman_save.yaml', 'w') do |file|
+      file.write(save.to_yaml)
+    end
   end
 
   def play
